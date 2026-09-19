@@ -1,5 +1,6 @@
 """FastAPI Application Main Entrypoint."""
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -12,10 +13,22 @@ from app.routers import (
     attendance, recognition, reports, devices, audit
 )
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize and seed database on startup for persistent/container environments (Render / Docker / Local)
+    if not os.environ.get("VERCEL"):
+        try:
+            from app.seed import seed_database
+            seed_database()
+        except Exception as e:
+            print("Startup DB initialization note:", e)
+    yield
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Production-ready real-time camera face recognition attendance management platform."
+    description="Production-ready real-time camera face recognition attendance management platform.",
+    lifespan=lifespan
 )
 
 # CORS Configuration
@@ -81,3 +94,8 @@ async def health_check():
 frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist"))
 if os.path.exists(frontend_dist):
     app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=False)
