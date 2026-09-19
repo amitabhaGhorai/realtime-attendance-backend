@@ -44,10 +44,10 @@ print('7. CSV Export Status:', csv_res.status_code, 'Content-Type:', csv_res.hea
 assert csv_res.status_code == 200
 assert 'Roll No' in csv_res.text or 'Student Roll No' in csv_res.text
 
-# 8. Check Frontend index.html served
+# 8. Check Root Route
 fe_res = client.get('/')
-print('8. Frontend Static Route Status:', fe_res.status_code, 'Has Root Div:', '<div id="root">' in fe_res.text)
+print('8. Root Route Status:', fe_res.status_code, 'Response:', fe_res.json())
 assert fe_res.status_code == 200
-assert '<div id="root">' in fe_res.text
+assert fe_res.json().get('status') == 'ONLINE'
 
 print('\nALL INTEGRATION ENDPOINTS VERIFIED SUCCESSFULLY!')

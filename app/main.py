@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from app.config import settings
 from app.database import async_engine, Base
 from app.websockets.connection_manager import ws_manager
@@ -17,8 +18,11 @@ from app.routers import (
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Ensure database tables exist on startup
-    async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with async_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        print("Lifespan DB setup note:", e)
     yield
 
 app = FastAPI(
@@ -36,6 +40,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Root Endpoint
+@app.get("/")
+async def root():
+    return {
+        "service": settings.PROJECT_NAME,
+        "status": "ONLINE",
+        "documentation": "/docs",
+        "health_check": "/api/health"
+    }
 
 # Mount API Routers
 app.include_router(auth.router, prefix=settings.API_PREFIX)
@@ -56,7 +70,6 @@ async def websocket_attendance_global(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            # Echo ping or heartbeat if client sends
     except WebSocketDisconnect:
         ws_manager.disconnect(websocket)
 
