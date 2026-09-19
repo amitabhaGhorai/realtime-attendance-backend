@@ -28,14 +28,20 @@ SyncSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sync_eng
 
 Base = declarative_base()
 
-def init_db():
-    try:
-        Base.metadata.create_all(bind=sync_engine)
-    except Exception as e:
-        print("Database schema init note:", e)
+_db_initialized = False
+
+def ensure_db():
+    global _db_initialized
+    if not _db_initialized:
+        try:
+            Base.metadata.create_all(bind=sync_engine)
+            _db_initialized = True
+        except Exception as e:
+            print("Lazy DB init note:", e)
 
 async def get_db():
     """Dependency for obtaining async DB session."""
+    ensure_db()
     async with AsyncSessionLocal() as session:
         try:
             yield session

@@ -4,11 +4,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.config import settings
-from app.database import init_db
 from app.websockets.connection_manager import ws_manager
-
-# Ensure tables are initialized
-init_db()
 
 # Routers
 from app.routers import (
