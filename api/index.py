@@ -1,20 +1,26 @@
 import os
 import sys
+import traceback
 
-# Add backend directory to sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
 
-from app.main import app
-from app.database import sync_engine, Base, SyncSessionLocal
-from app.models import User
-from app.seed import seed_database
-
-# Initialize database schema and seeds on cold start if needed
 try:
-    Base.metadata.create_all(bind=sync_engine)
-    db = SyncSessionLocal()
-    if not db.query(User).filter_by(username="admin").first():
-        seed_database()
-    db.close()
-except Exception as e:
-    print("Startup DB init note:", e)
+    from app.main import app as main_app
+    app = main_app
+except Exception as exc:
+    err_traceback = traceback.format_exc()
+    print("FATAL COLD START ERROR:", err_traceback)
+    
+    from fastapi import FastAPI
+    from fastapi.responses import PlainTextResponse
+    
+    app = FastAPI()
+    
+    @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"])
+    async def fallback_debug(path: str = ""):
+        return PlainTextResponse(
+            f"Vercel Serverless Python Cold Start Exception:\n\n{err_traceback}",
+            status_code=500
+        )

@@ -1,13 +1,14 @@
 """FastAPI Application Main Entrypoint."""
 import os
-from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
 from app.config import settings
-from app.database import async_engine, Base
+from app.database import init_db
 from app.websockets.connection_manager import ws_manager
+
+# Ensure tables are initialized
+init_db()
 
 # Routers
 from app.routers import (
@@ -15,21 +16,10 @@ from app.routers import (
     attendance, recognition, reports, devices, audit
 )
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Ensure database tables exist on startup
-    try:
-        async with async_engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-    except Exception as e:
-        print("Lifespan DB setup note:", e)
-    yield
-
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Production-ready real-time camera face recognition attendance management platform.",
-    lifespan=lifespan
+    description="Production-ready real-time camera face recognition attendance management platform."
 )
 
 # CORS Configuration
