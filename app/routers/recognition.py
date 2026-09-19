@@ -1,4 +1,4 @@
-﻿"""Live Camera Frame Verification & Face Recognition Integration Endpoint."""
+"""Live Camera Frame Verification & Face Recognition Integration Endpoint."""
 import json
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status

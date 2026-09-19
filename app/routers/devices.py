@@ -1,4 +1,4 @@
-﻿"""Device Fleet & Camera Health Monitoring Endpoints."""
+"""Device Fleet & Camera Health Monitoring Endpoints."""
 from datetime import datetime, timedelta
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status

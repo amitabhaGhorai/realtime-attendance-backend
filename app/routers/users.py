@@ -1,4 +1,4 @@
-﻿"""Student, Teacher, and User Management Endpoints."""
+"""Student, Teacher, and User Management Endpoints."""
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession

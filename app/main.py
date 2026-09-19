@@ -1,4 +1,4 @@
-﻿"""FastAPI Application Main Entrypoint."""
+"""FastAPI Application Main Entrypoint."""
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect

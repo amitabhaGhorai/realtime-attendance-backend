@@ -1,4 +1,4 @@
-﻿"""Database Initialization and Demo Data Seeder."""
+"""Database Initialization and Demo Data Seeder."""
 import json
 from datetime import datetime, date
 import numpy as np

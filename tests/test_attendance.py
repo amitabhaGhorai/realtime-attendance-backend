@@ -1,4 +1,4 @@
-﻿"""Automated Test Suite for Attendance Business Rules and Verification (unittest)."""
+"""Automated Test Suite for Attendance Business Rules and Verification (unittest)."""
 import unittest
 from datetime import datetime, timedelta
 import numpy as np

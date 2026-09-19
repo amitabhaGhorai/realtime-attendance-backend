@@ -1,4 +1,4 @@
-﻿"""Biometric Face Enrollment and Privacy Lifecycle Endpoints."""
+"""Biometric Face Enrollment and Privacy Lifecycle Endpoints."""
 import json
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status

@@ -1,4 +1,4 @@
-﻿# Real-Time Attendance Management System — Backend API & AI Engine
+# Real-Time Attendance Management System — Backend API & AI Engine
 
 A production-grade, centralized **FastAPI** backend powering camera-based face recognition attendance tracking, presentation attack anti-spoofing, real-time WebSocket telemetry, and multi-tier role-based access control.
 

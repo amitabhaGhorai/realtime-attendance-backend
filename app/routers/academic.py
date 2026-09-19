@@ -1,4 +1,4 @@
-﻿"""Academic Structure & Curriculum Endpoints."""
+"""Academic Structure & Curriculum Endpoints."""
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession

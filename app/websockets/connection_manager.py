@@ -1,4 +1,4 @@
-﻿"""WebSocket Connection and Broadcast Manager for Real-Time Attendance."""
+"""WebSocket Connection and Broadcast Manager for Real-Time Attendance."""
 import json
 from typing import Dict, List, Optional
 from fastapi import WebSocket

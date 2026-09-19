@@ -1,4 +1,4 @@
-﻿"""Pydantic Schemas for Request/Response Validation."""
+"""Pydantic Schemas for Request/Response Validation."""
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List, Dict, Any
 from datetime import datetime

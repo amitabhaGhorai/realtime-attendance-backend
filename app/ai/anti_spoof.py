@@ -1,4 +1,4 @@
-﻿"""Presentation Attack Detection (Anti-Spoofing / Liveness Check)."""
+"""Presentation Attack Detection (Anti-Spoofing / Liveness Check)."""
 import cv2
 import numpy as np
 from typing import Tuple, Dict, Any

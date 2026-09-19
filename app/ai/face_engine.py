@@ -1,4 +1,4 @@
-﻿"""Face Detection, Representation, and Matching Engine."""
+"""Face Detection, Representation, and Matching Engine."""
 import os
 import cv2
 import base64

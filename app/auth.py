@@ -1,4 +1,4 @@
-﻿"""Authentication and Role-Based Authorization Utilities."""
+"""Authentication and Role-Based Authorization Utilities."""
 from datetime import datetime, timedelta
 from typing import Optional, List
 from fastapi import Depends, HTTPException, status

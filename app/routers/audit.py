@@ -1,4 +1,4 @@
-﻿"""Audit Logging and System Administration Configuration Endpoints."""
+"""Audit Logging and System Administration Configuration Endpoints."""
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession

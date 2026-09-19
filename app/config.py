@@ -1,6 +1,10 @@
-﻿"""Application Configuration Settings."""
+"""Application Configuration Settings."""
 import os
 from dataclasses import dataclass
+
+is_vercel = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+default_db = "sqlite+aiosqlite:////tmp/attendance.db" if is_vercel else "sqlite+aiosqlite:///./attendance.db"
+default_sync_db = "sqlite:////tmp/attendance.db" if is_vercel else "sqlite:///./attendance.db"
 
 @dataclass
 class Settings:
@@ -9,8 +13,8 @@ class Settings:
     API_PREFIX: str = "/api"
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./attendance.db")
-    SYNC_DATABASE_URL: str = os.getenv("SYNC_DATABASE_URL", "sqlite:///./attendance.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", default_db)
+    SYNC_DATABASE_URL: str = os.getenv("SYNC_DATABASE_URL", default_sync_db)
     
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "realtime-attendance-super-secret-jwt-key-2026")

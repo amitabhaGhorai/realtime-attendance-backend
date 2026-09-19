@@ -1,4 +1,4 @@
-﻿"""Reporting and Export (PDF & CSV) Endpoints."""
+"""Reporting and Export (PDF & CSV) Endpoints."""
 import io
 import csv
 from datetime import datetime, date
