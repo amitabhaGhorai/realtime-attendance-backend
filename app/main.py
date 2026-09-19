@@ -50,6 +50,24 @@ async def root():
         "health_check": "/api/health"
     }
 
+# API Root Endpoint
+@app.get("/api")
+@app.get("/api/")
+async def api_root():
+    return {
+        "service": settings.PROJECT_NAME,
+        "status": "ONLINE",
+        "documentation": "/docs",
+        "health_check": "/api/health",
+        "sample_endpoints": [
+            "/api/auth/login",
+            "/api/departments",
+            "/api/students",
+            "/api/attendance/sessions",
+            "/api/reports/daily"
+        ]
+    }
+
 # Mount API Routers
 app.include_router(auth.router, prefix=settings.API_PREFIX)
 app.include_router(academic.router, prefix=settings.API_PREFIX)
