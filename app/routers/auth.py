@@ -1,5 +1,5 @@
 """Authentication and Authorization Endpoints."""
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
@@ -10,12 +10,42 @@ from app.auth import verify_password, create_access_token, get_current_user
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/login", response_model=Token)
-async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
-    stmt = select(User).where(User.username == req.username)
+async def login(
+    request: Request,
+    db: AsyncSession = Depends(get_db)
+):
+    username = None
+    password = None
+
+    ct = request.headers.get("content-type", "")
+    if "application/json" in ct:
+        try:
+            body = await request.json()
+            if isinstance(body, dict):
+                username = body.get("username")
+                password = body.get("password")
+        except Exception:
+            pass
+
+    if not username or not password:
+        try:
+            form = await request.form()
+            username = form.get("username") or username
+            password = form.get("password") or password
+        except Exception:
+            pass
+
+    if not username or not password:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Both 'username' and 'password' are required (as JSON or Form data)."
+        )
+
+    stmt = select(User).where(User.username == username)
     result = await db.execute(stmt)
     user = result.scalar_one_or_none()
 
-    if not user or not verify_password(req.password, user.hashed_password):
+    if not user or not verify_password(password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
